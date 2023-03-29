@@ -69,8 +69,6 @@ for ly = 1:length(lags)
     %% uncomment following line if you want all vacf plots
 %     plot((0:final_time),vacf{1,ly+1}) %% evolution of all vacf vs lags
 end
-diff = final_time - start_time;
-time = linspace(0, diff,length(vacf{1,1}));
 
 %% spatial averaging across all time lags
 cum_vacf = 0;
@@ -81,6 +79,8 @@ for g = 1:length(lags)
     mean_vacf(g,1) = cum_vacf/length(vacf);
     cum_vacf = 0;
 end
+diff = final_step*timestep - start_step*timestep;
+time = linspace(0, diff,length(mean_vacf));
 
 %% plotting vacf with samples + fluctuation line about vacf = 0
 p = plot(time,mean_vacf,'b-','DisplayName','Normalized VACF','LineWidth',2.5);
