@@ -4,9 +4,10 @@
 % This code takes LAMMPS dump file, start and final timestep, and timestep
 % size as inputs and gives the vacf considering all time lags (change lags
 % variable if you want fewer lags)
+%%%%%%%%%%%%%
 
 %% clear space
-% clearvars -except vx vy vz %% debug purposes; keep commented out
+% clearvars -except vx vy vz %% debug purposes; keep commented-out
 clear
 clc
 close
@@ -20,6 +21,7 @@ timestep = 0.001; %% in ps (compatible with LAMMPS metal units)
 
 %% read file
 final_time = timestep*final_step;
+start_time = timestep*start_step;
 A = regexp(fileread(file),'\n','split');
 atomsLine = find(contains(A,'NUMBER OF ATOMS'));
 totAtoms = A{1,atomsLine(1)+1};
@@ -53,14 +55,19 @@ end
 
 %% lags [[ change here if you want to change lag numbers; i.e, lags = lags = (1:length(vx)-100) ]]
 lags = (1:length(vx)); %% total lags = lags (1->N) + 0th lag; N = length(vx) 
+diff = final_time - start_time;
 
 %% lag = 0
 for lx = 1:length(vx)
     dotProduct = vx{1,lx}.*vx{1,lx}+vy{1,lx}.*vy{1,lx}+vz{1,lx}.*vz{1,lx};
     avg_v0(lx,1) = mean(dotProduct);
 end
+
 vacf{1,1} = avg_v0./avg_v0(1);
-% plot((0:final_time),vacf{1,1}) %% evolution of vacf vs lag=0
+
+%%% uncomment following 3 lines to see 1st self-correlation (V(t).V(t))
+% time0 = linspace(0,diff,length(vacf{1,1}));
+% plot(time0,vacf{1,1}) %% evolution of vacf vs lag=0
 % hold on
 
 %% lag 1 --> final lag
@@ -76,8 +83,8 @@ for ly = 1:length(lags)
     end
     vacf{1,ly+1} = avg_v./avg_v(1);   %% normalization
     
-    %% uncomment following line if you want all vacf plots
-%     plot((0:final_time),vacf{1,ly+1}) %% evolution of all vacf vs lags
+    %% uncomment the following line if you want all vacf plots
+%     plot(time0,vacf{1,ly+1}) %% evolution of all vacf vs lags
 end
 
 %% spatial averaging across all time lags
@@ -89,7 +96,6 @@ for g = 1:length(lags)
     mean_vacf(g,1) = cum_vacf/length(vacf);
     cum_vacf = 0;
 end
-diff = final_step*timestep - start_step*timestep;
 time = linspace(0, diff,length(mean_vacf));
 
 %% plotting vacf with samples + fluctuation line about vacf = 0
