@@ -51,7 +51,7 @@ for i = 1:length(timesteps)
     vz{1,i} = s{8};
 end
 
-%% lags
+%% lags [[ change here if you want to change lag numbers; i.e, lags = lags = (1:length(vx)-100) ]]
 lags = (1:length(vx)); %% total lags = lags (1->N) + 0th lag; N = length(vx) 
 
 %% lag = 0
