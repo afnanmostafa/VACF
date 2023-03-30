@@ -1,12 +1,12 @@
-## vacf
+## VACF
 plots velocity auto-correlation function from LAMMPS-dumped file
 
 ### Folders:
 
-* src = source codes
+* /src = source codes for generating vacf plots
 
-* example = example figures
+* /example = example figures of vacf
 
-let me know if you stumble upon edge cases or any bugs at afnanmostafa102@gmail.com
+please reach out to me if you stumble upon edge cases or any bugs at afnanmostafa102@gmail.com
 
-This is a very quickly-written code and might not be perfect.
+**P.S. This is a very hastily-written code and might not be perfect.**
